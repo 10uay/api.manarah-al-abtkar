@@ -209,7 +209,7 @@ const systemSchema = new mongoose.Schema(
                 type: String,
                 required: false,
               },
-              icons: {
+              icon: {
                 type: String,
                 required: false,
               },
@@ -266,6 +266,14 @@ const systemSchema = new mongoose.Schema(
       M_Get_A_Service: {
         title: {
           type: String,
+          required: false,
+        },
+        img: {
+          type: String,
+          required: false,
+        },
+        whatsapp_button: {
+          type: Boolean,
           required: false,
         },
       },

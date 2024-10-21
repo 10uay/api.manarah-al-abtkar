@@ -8,7 +8,7 @@ export const getSystems = async (req, res, next) => {
     //      api/post/get-posts/${currentUser._id}/${startIndex}
     //      req.params.startIndex becausse in Route we write /get-posts/:currentUserId/:startIndex
 
-    const systems = await Solution.find({
+    const systems = await System.find({
       ...(req.query.userId && { userId: req.query.userId }),
       ...(req.query.classification && {
         classification: req.query.classification,

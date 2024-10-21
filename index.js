@@ -22,7 +22,11 @@ const allowedOrigins =
 
 app.use(
   cors({
-    origin: allowedOrigins,
+    origin: [
+      "https://www.dropbox.com",
+      "http://localhost:5173",
+      "https://m.almajdacademic.com",
+    ],
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
@@ -46,20 +50,44 @@ app.listen(3000, () => {
   console.log("Server running on port 3000");
 });
 
+const clientId = "15z1nc9oak0qkto";
+const clientSecret = "a9zkadmxbzerpu3";
+const redirectUri = "http://localhost:3000/oauth2/callback";
 
-app.use("/", (req,res)=> res.json("Server is working..."));
+// app.use("/", (req, res) => res.json("Server is working..."));
 app.use("/api/post", postRoutes);
 app.use("/api/solutions", solutionsRoutes);
 app.use("/api/services", servicesRoutes);
 app.use("/api/systems", systemsRoutes);
-app.use("/api/portfolios", portfolioRoutes);
+app.use("/api/portfolio", portfolioRoutes);
 app.use("/locales", langRoutes);
 app.use("/api/images", imageRoutes);
-app.use("/uploads", express.static("uploads"));
+app.get("/start-dropbox-auth", (req, res) => {
+  const authorizationUrl = `https://www.dropbox.com/oauth2/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}`;
+  res.redirect(authorizationUrl);
+});
+app.get("/oauth2/callback", async (req, res) => {
+  const code = req.query.code;
 
-// app.get("/", (req, res) => {
-//   res.sendFile(path.join(__dirname, "client", "dist", "index.html"));
-// });
+  const response = await fetch(`https://api.dropboxapi.com/1/oauth2/token`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      Authorization:
+        "Basic " +
+        Buffer.from(`${clientId}:${clientSecret}`).toString("base64"),
+    },
+    body: `grant_type=authorization_code&code=${code}&redirect_uri=${redirectUri}`,
+  });
+
+  const data = await response.json();
+
+  // Store the access token and refresh token securely
+  const accessToken = data.access_token;
+  const refreshToken = data.refresh_token;
+
+  if (accessToken) res.json({ accessToken });
+});
 
 app.use((error, req, res, next) => {
   const statusCode = error.statusCode || 500;

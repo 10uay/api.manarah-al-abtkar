@@ -3,7 +3,7 @@ import Lang from "../models/lang.model.js";
 export const getLang = async (req, res) => {
   try {
     const { lng } = req.params;
-    const translation = await Lang.findOne({ _id: "66e0b8ef14617f17ed310967" });
+    const translation = await Lang.findOne({ _id: "670d7bacd477fb076b5bc551" });
     if (translation && translation[lng]) {
       res.json(translation[lng].translation);
     } else {
@@ -22,7 +22,7 @@ export const uploadLang = async (req, res) => {
   // console.log(`New translations for ${lng}:`, newTranslations);
 
   try {
-    const existingLang = await Lang.findById("66e0b8ef14617f17ed310967");
+    const existingLang = await Lang.findById("670d7bacd477fb076b5bc551");
 
     if (!existingLang) {
       return res.status(404).json({ message: "Document not found" });
@@ -65,7 +65,7 @@ export const uploadLang = async (req, res) => {
     const options = { new: true };
 
     const updatedLang = await Lang.findByIdAndUpdate(
-      "66e0b8ef14617f17ed310967",
+      "670d7bacd477fb076b5bc551",
       update,
       options
     );

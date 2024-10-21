@@ -308,7 +308,7 @@ const serviceSchema = new mongoose.Schema(
                 type: String,
                 required: false,
               },
-              icons: {
+              icon: {
                 type: String,
                 required: false,
               },

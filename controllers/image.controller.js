@@ -1,73 +1,67 @@
 import Image from "../models/image.model.js";
-import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
+import { Dropbox } from "dropbox";
+import fs from "fs";
 
-const __filename = fileURLToPath(import.meta.url);
+const __filename = fileURLToPath("file:///D:/Al-Manara/api/index.js");
 const __dirname = dirname(__filename);
 
-export const uploadImg = (req, res) => {
-  try {
-    if (!req.file) {
-      return res.status(400).json({ error: "No file uploaded" });
-    }
-    const filePath = path.join(__dirname, "../uploads/", req.file.filename);
 
-    const newImage = new Image({
-      name: req.file.filename,
-      img: {
-        data: fs.readFileSync(filePath),
-        contentType: req.file.mimetype,
-      },
+export const uploadImg = async (req, res) => {
+  try {
+    
+    const file = req.file;
+    const filePath = path.join(__dirname, "uploads", file.filename);
+
+    // Upload file to Dropbox
+    const result = await dbx.filesUpload({
+      path: `/images/${file.filename}`,
+      contents: fs.readFileSync(filePath),
+      mode: "overwrite",
     });
 
-    newImage
-      .save()
-      .then(() =>
-        res.json({
-          message: "Image uploaded successfully",
-          imageUrl: `uploads/${req.file.filename}`,
-        })
-      )
-      .catch((err) => {
-        console.error("Error saving image to database:", err);
-        res.status(400).json({ error: "Error uploading image" });
-      });
-  } catch (err) {
-    console.error("Error processing image upload:", err);
-    res.status(500).json({ error: "Internal Server Error" });
+    const thumbnailLink = await dbx.files.getThumbnail({
+      path: filePath,
+    });
+
+    console.log(thumbnailLink);
+
+    // Get the full URL of the uploaded image
+    // console.log(result);
+    const imageUrl = result.url;
+
+    res.json({ imageUrl });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Error uploading image (controller)" });
   }
 };
 
-export const uploadImgs = async (req, res) => {
-  try {
-    if (!req.files || req.files.length === 0) {
-      return res.status(400).json({ error: "No files uploaded" });
-    }
 
-    const imageUrls = [];
-    for (const file of req.files) {
-      const filePath = path.join(__dirname, "../uploads/", file.filename);
 
-      const newImage = new Image({
-        name: file.filename,
-        img: {
-          data: fs.readFileSync(filePath),
-          contentType: file.mimetype,
-        },
-      });
+// const upload = async (file, path) => {
+//   try {
+//     // Read the content of the file from the local file system
+//     const fileContent = fs.readFileSync(file.path, "utf8");
+//     // console.log(fileContent);
 
-      await newImage.save();
-      imageUrls.push(`uploads/${file.filename}`);
-    }
+//     if (fileContent) {
+//       // Upload the file content to Dropbox at the specified path
+//       const fileuploaded = await dbx.filesUpload({
+//         path,
+//         contents: fileContent,
+//       });
 
-    res.json({
-      message: "Images uploaded successfully",
-      imageUrls,
-    });
-  } catch (err) {
-    console.error("Error processing image upload:", err);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-}
+//       // Return the response from the upload operation
+//       return fileuploaded;
+//     } else {
+//       // Return false if there was no content in the file
+//       return false;
+//     }
+//   } catch (error) {
+//     // Log any errors that occur
+//     console.error("Error:", error);
+//   }
+// };

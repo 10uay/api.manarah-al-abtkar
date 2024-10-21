@@ -60,6 +60,10 @@ const solutionSchema = new mongoose.Schema(
           type: Boolean,
           required: true,
         },
+        M_Section_Two: {
+          type: Boolean,
+          required: true,
+        },
         M_Game: {
           type: Boolean,
           required: true,
@@ -72,7 +76,6 @@ const solutionSchema = new mongoose.Schema(
           type: Boolean,
           required: true,
         },
-
       },
 
       M_Intro_One: {
@@ -257,6 +260,38 @@ const solutionSchema = new mongoose.Schema(
           required: false,
         },
       },
+      M_Section_Two: [
+        {
+          title: {
+            type: String,
+            required: false,
+          },
+          infos: [
+            {
+              title: {
+                type: String,
+                required: false,
+              },
+              para: {
+                type: String,
+                required: false,
+              },
+              icon: {
+                type: String,
+                required: false,
+              },
+            },
+          ],
+          img: {
+            type: String,
+            required: false,
+          },
+          dir: {
+            type: Boolean,
+            required: false,
+          },
+        },
+      ],
       M_Slider: {
         title: {
           type: String,
@@ -300,6 +335,14 @@ const solutionSchema = new mongoose.Schema(
       M_Get_A_Service: {
         title: {
           type: String,
+          required: false,
+        },
+        img: {
+          type: String,
+          required: false,
+        },
+        whatsapp_button: {
+          type: Boolean,
           required: false,
         },
       },
