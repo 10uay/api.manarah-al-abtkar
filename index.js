@@ -25,8 +25,12 @@ app.use(
       // "https://www.dropbox.com",
       "http://localhost:5173",
       "https://m.almajdacademic.com",
+<<<<<<< HEAD
       "https://manarah-al-abtkat.vercel.app",
       "https://manarah-al-abtkar.vercel.app",
+=======
+      "https://manarah-al-abtkat.vercel.app"
+>>>>>>> 615df8fb92938065fbca08476567aa35191ca38c
     ],
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
