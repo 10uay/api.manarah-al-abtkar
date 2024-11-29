@@ -27,6 +27,10 @@ app.use(
       "https://m.almajdacademic.com",
       "https://manarah-al-abtkat.vercel.app",
       "https://manarah-al-abtkar.vercel.app",
+      "http://89.116.51.14:4173",
+      "http://89.116.51.14:5173",
+      "http://localhost:4173",
+      "http://localhost:5173"
     ],
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
