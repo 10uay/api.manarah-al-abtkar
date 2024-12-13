@@ -30,7 +30,8 @@ app.use(
       "http://89.116.51.14:4173",
       "http://89.116.51.14:5173",
       "http://localhost:4173",
-      "http://localhost:5173"
+      "http://localhost:5173",
+      "http://manarah-alabtkar.com"
     ],
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
